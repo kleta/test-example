@@ -27,11 +27,11 @@ public class FileService {
 	@Value("${inputDir}")
 	private String inputDir;
 	
-	@Value("${outputDir1}")
-	private String outputDir1;
+	@Value("${outputDir}")
+	private String outputDir;
 
 	@Value("${outputDirZip}")
-	private String outputDir2;
+	private String outputDirZip;
 	
 	@PostConstruct
 	public void init() throws Exception {
