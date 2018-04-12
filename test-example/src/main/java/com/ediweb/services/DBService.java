@@ -16,6 +16,10 @@ public class DBService {
 	@Autowired
 	private InputDocRepository ir;
 	
+	@PostConstruct
+	public void init() {
+		System.out.println();
+	}
 	
 	public void saveInputDoc(InputDoc doc) {
 		
