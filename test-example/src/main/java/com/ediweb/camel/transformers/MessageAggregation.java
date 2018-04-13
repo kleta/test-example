@@ -12,6 +12,7 @@ import java.util.zip.ZipOutputStream;
 import org.apache.camel.Exchange;
 import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.processor.aggregate.AggregationStrategy;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.ediweb.entityes.InputDoc;
+import com.ediweb.entityes.OutputDoc;
 import com.ediweb.services.DBService;
 
 @Component
@@ -57,12 +59,19 @@ public class MessageAggregation implements AggregationStrategy {
 		}
 		return newExchange;
 	}
-	private void persistToDB(File oldFile, File newFile) {
+	private void persistToDB(File oldFile, File newFile) throws IOException {
 		InputDoc input=new InputDoc();
 		input.setDate(LocalDate.now());
 		String orderNum = newFile.getName().replaceAll(".xml", "");
 		input.setOrderNumber(orderNum);
-		
+		String inputContent = FileUtils.readFileToString(oldFile, "UTF-8");
+		String outputContent = FileUtils.readFileToString(newFile, "UTF-8");
+		input.setContent(inputContent);
+		OutputDoc output=new OutputDoc();
+		output.setContent(outputContent);
+		input.setOutputDoc(output);
+		output.setInputDoc(input);
+		ds.saveInputDoc(input);
 	}
 	private void addToZipFile(File file, ZipOutputStream zos) throws FileNotFoundException, IOException {
 

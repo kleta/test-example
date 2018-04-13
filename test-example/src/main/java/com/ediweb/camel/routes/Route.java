@@ -20,10 +20,6 @@ public class Route extends RouteBuilder {
 	@Autowired
 	private MessageAggregation agregator;
 
-	@PostConstruct
-	public void init() {
-		System.out.println();
-	}
 
 	@Override
 	public void configure() throws Exception {
